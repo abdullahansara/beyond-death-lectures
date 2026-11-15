@@ -67,7 +67,7 @@ def page(title, body, depth=0):
 <body><header><div class="wrap"><a class="brand" href="{p}index.html">Beyond Death <span>Ān sūy-e marg: the lectures of Hujjat al-Islam Aminikhah, with English summaries</span></a>
 <nav><a href="{p}about.html">The speaker</a><a href="{p}nde-iran.html">NDEs in Iran</a><a href="{p}position.html">His reading of NDEs</a><a href="{p}sessions/index.html">Sessions</a><a href="{p}notes.html">About this site</a></nav></div></header>
 <main class="wrap">{body}</main>
-<footer><div class="wrap">Lectures and Persian transcripts belong to their source (aminikhaah.ir) and are shown here for study, with credit. English summaries were prepared with AI assistance and reviewed against the Persian transcripts. <a href="{p}notes.html">About this site</a></div></footer></body></html>''')
+<footer><div class="wrap">Lectures and Persian transcripts &copy; Ḥujjat al-Islām Muṣṭafā Amīnīkhāh (<a href="https://aminikhaah.ir/">aminikhaah.ir</a>), shown here with credit. English summaries, essays and site &copy; 2026 Abdullah Ansar. The summaries were prepared with AI assistance and checked against the Persian. <a href="{p}notes.html">About this site</a></div></footer></body></html>''')
 
 
 def make_docx(md, dst):
@@ -98,6 +98,12 @@ def make_docx(md, dst):
                 runs(p, m.group(2))
             else:
                 runs(d.add_paragraph(), line)
+    d.add_paragraph()
+    credit = d.add_paragraph('Summary \u00a9 2026 Abdullah Ansar. Lecture \u00a9 Ḥujjat al-Islām Muṣṭafā Amīnīkhāh, aminikhaah.ir. '
+                             'This is a summary of the lecture, not a translation.')
+    credit.runs[0].italic = True
+    d.core_properties.author = 'Abdullah Ansar'
+    d.core_properties.title = md.split(chr(10))[0].lstrip('# ').strip()
     d.save(dst)
 
 

@@ -32,8 +32,10 @@ python tools/build.py
 
 The script reads the raw transcripts and the session summaries from a folder named `AminikhahDurus` next to this repository. Set `BEYOND_DEATH_SRC` to use another location. That source folder is not part of this repository, so a full rebuild needs it. Template and style changes can be tested by opening the generated pages in a browser.
 
-## Sources and credit
+## Credits and copyright
 
-The lectures and the Persian transcripts belong to [aminikhaah.ir](https://aminikhaah.ir/), the speaker's own site, and are shown here with credit to make the series easier to study. The transcripts are the source site's automatic transcriptions and contain mishearings and gaps. The English summaries are not translations: they follow each lecture, were prepared with AI assistance and were checked against the Persian text. Qurʾān verses are given in the Sahih International translation. Arabic and Persian names and terms are transliterated.
+The lectures and the Persian transcripts are © Ḥujjat al-Islām Muṣṭafā Amīnīkhāh and [aminikhaah.ir](https://aminikhaah.ir/), and are shown here with credit to make the series easier to study. The English summaries, the essays on the speaker and on near-death experiences in Iran, the arrangement of the material and the site design are © 2026 Abdullah Ansar.
+
+The transcripts are the source site's automatic transcriptions and contain mishearings and gaps. The English summaries are not translations: they follow each lecture, were prepared with AI assistance and were checked against the Persian text. Qurʾān verses are given in the Sahih International translation. Arabic and Persian names and terms are transliterated.
 
 If the speaker or his site would like anything changed or removed, please open an issue on this repository.
