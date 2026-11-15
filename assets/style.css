@@ -1,0 +1,26 @@
+:root{--ink:#1d2a2f;--accent:#1f5f5b;--bg:#faf8f3;--line:#d9d3c4}
+*{box-sizing:border-box}
+body{margin:0;font:17px/1.65 Georgia,"Times New Roman",serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px}
+header{background:var(--accent);color:#fff}
+header .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;padding:14px 18px}
+header a{color:#fff;text-decoration:none}
+.brand{font-size:1.25rem;font-weight:bold}
+.brand span{display:block;font-size:.8rem;font-weight:normal;opacity:.85}
+nav a{margin-left:16px;font-size:.95rem}
+h1{font-size:1.7rem;line-height:1.25}
+h2{margin-top:2rem;border-bottom:1px solid var(--line);padding-bottom:4px}
+h3{margin-top:1.4rem;color:var(--accent)}
+a{color:var(--accent)}
+table{width:100%;border-collapse:collapse}
+td,th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.fa{font-family:"Noto Naskh Arabic","Vazirmatn",Tahoma,"Times New Roman",serif;font-size:1.15em;line-height:2}
+td.fa{text-align:right}
+details>div.fa p{margin:.8em 0}
+summary{cursor:pointer;color:var(--accent);font-weight:bold}
+.small{font-size:.85rem;color:#566}
+.pn{display:flex;justify-content:space-between;margin:12px 0}
+audio{width:100%}
+.summary ul{margin:.3em 0}
+.note{background:#fff;border-left:4px solid var(--accent);padding:8px 14px;margin:1.2em 0}
+footer{margin-top:3rem;padding:18px 0;border-top:1px solid var(--line);font-size:.85rem;color:#566}
