@@ -67,7 +67,7 @@ def page(title, body, depth=0):
 <body><header><div class="wrap"><a class="brand" href="{p}index.html">Beyond Death <span>Ān sūy-e marg: the lectures of Hujjat al-Islam Aminikhah, with English summaries</span></a>
 <nav><a href="{p}about.html">The speaker</a><a href="{p}nde-iran.html">NDEs in Iran</a><a href="{p}position.html">His reading of NDEs</a><a href="{p}sessions/index.html">Sessions</a><a href="{p}notes.html">About this site</a></nav></div></header>
 <main class="wrap">{body}</main>
-<footer><div class="wrap">Lectures and Persian transcripts &copy; Ḥujjat al-Islām Muṣṭafā Amīnīkhāh (<a href="https://aminikhaah.ir/">aminikhaah.ir</a>), shown here with credit. English summaries, essays and site &copy; 2026 Abdullah Ansar. The summaries were prepared with AI assistance and checked against the Persian. <a href="{p}notes.html">About this site</a></div></footer></body></html>''')
+<footer><div class="wrap">Lectures, audio and Persian transcripts &copy; Ḥujjat al-Islām Muṣṭafā Amīnīkhāh (<a href="https://aminikhaah.ir/">aminikhaah.ir</a>), shown here with credit. English summaries, essays and site &copy; 2026 Abdullah Ansar. The summaries were prepared with AI assistance and checked against the Persian. <a href="{p}notes.html">About this site</a></div></footer></body></html>''')
 
 
 def make_docx(md, dst):
@@ -128,6 +128,8 @@ for n in range(1, 42):
 
 write(os.path.join(ROOT, 'assets', 'style.css'), read(os.path.join(ROOT, 'tools', 'fonts.css')) + read(os.path.join(ROOT, 'tools', 'style.css')))
 adir = os.path.join(ROOT, 'audio')
+_yt = os.path.join(SRC, 'notes', 'youtube_playlist_beyond_death.json')
+YT = {int(i): v for i, v, _ in json.load(open(_yt, encoding='utf8'))} if os.path.exists(_yt) else {}
 for s in ses:
     n = s['n']
     af = [f for f in ('opus', 'm4a', 'mp3', 'ogg') if os.path.exists(os.path.join(adir, f'{n:02d}.{f}'))]
@@ -139,16 +141,17 @@ for s in ses:
     paras = ''.join('<p>%s</p>' % E(l) for l in s['body'])
     prev = f'<a href="{n-1:02d}.html">&larr; Session {n-1}</a>' if n > 1 else '<span></span>'
     nxt = f'<a href="{n+1:02d}.html">Session {n+1} &rarr;</a>' if n < 41 else '<span></span>'
+    yt = f' &middot; <a href="https://www.youtube.com/watch?v={YT[n]}">YouTube</a>' if n in YT else ''
     if s['audio']:
         au = (f'<audio controls preload="none" src="../audio/{s["audio"]}"></audio>'
-              f'<p class="small">Original audio, re-encoded to a small file for the web. '
-              f'<a href="https://aminikhaah.ir/song/{n}">Original page</a>.</p>')
+              f'<p class="small">Audio of the lecture, compressed for streaming (<a href="../audio/{s["audio"]}">download</a>). '
+              f'Original recordings: <a href="https://aminikhaah.ir/song/{n}">aminikhaah.ir</a>{yt}.</p>')
     else:
-        au = (f'<p class="small">Listen to this session at its <a href="https://aminikhaah.ir/song/{n}">source page</a>.</p>')
+        au = (f'<p class="small">Listen to this session at <a href="https://aminikhaah.ir/song/{n}">aminikhaah.ir</a>{yt}.</p>')
     body = f'''<div class="pn">{prev}{nxt}</div>
 <h1>Session {n}: {E(s['en'])}</h1>
 <p class="fa" dir="rtl" lang="fa">{E(s['pt'])}</p>
-<h2>Audio</h2>{au}
+<h2 id="audio">Audio</h2>{au}
 <h2>Summary (English)</h2>
 <div class="summary">{md2html(s['md'])}</div>
 <p class="small"><a href="../downloads/session-{n:02d}-summary.docx">Download summary (.docx)</a></p>
@@ -165,11 +168,11 @@ for g, a, b in groups:
     rows += f'<h2>{g}</h2><table><tr><th>#</th><th>Session</th><th>Persian title</th><th>Audio</th></tr>'
     for s in ses[a - 1:b]:
         rows += (f'<tr><td>{s["n"]}</td><td><a href="{s["n"]:02d}.html">{E(s["en"])}</a></td>'
-                 f'<td class="fa" dir="rtl" lang="fa">{E(s["pt"])}</td><td><a href="https://aminikhaah.ir/song/{s["n"]}">Listen</a></td></tr>')
+                 f'<td class="fa" dir="rtl" lang="fa">{E(s["pt"])}</td><td><a href="{s["n"]:02d}.html#audio">Listen</a></td></tr>')
     rows += '</table>'
 write(os.path.join(ROOT, 'sessions', 'index.html'), page('Sessions',
       '<h1>The sessions</h1><p>Forty-one sessions on the book <em>Ān sūy-e marg</em> ("Beyond Death"), '
-      'given to university students in Iran. Each page has an English summary and the Persian transcript, with a link to the audio on the speaker\'s site.</p>' + rows, 1))
+      'given to university students in Iran. Each page has an English summary and the Persian transcript, with the audio of the lecture.</p>' + rows, 1))
 
 for name, title in (('index', 'Home'), ('about', 'The speaker'), ('nde-iran', 'Near-death experiences in Iran'), ('position', 'A Sadrian reading of NDEs'), ('notes', 'About this site')):
     body = read(os.path.join(ROOT, 'tools', 'pages', name + '.html'))
