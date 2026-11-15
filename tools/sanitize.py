@@ -66,4 +66,20 @@ def clean(md):
     t = re.sub(r'[ \t]+\n', '\n', t)
     t = re.sub(r'  +', ' ', t)
     t = re.sub(r' ([,.;:])', r'\1', t)
+    # bullets that open with a bold run-in head ("- **Label.** text"): keep the text, drop the head
+    t = re.sub(r'(?m)^(\s*- )\*\*[^*\n]{2,80}?[.:]\*\* ', r'\1', t)
     return t
+
+
+NAME_SUBS = [('Hujjat al-Islam', 'Ḥujjat al-Islām'), ('Mustafa Aminikhah', 'Muṣṭafā Amīnīkhāh'), ('Aminikhah', 'Amīnīkhāh')]
+
+
+def translit_text(s):
+    for a, b in NAME_SUBS:
+        s = s.replace(a, b)
+    return s
+
+
+def translit_html(h):
+    # transliterate the speaker's name in text nodes only, never inside tags, URLs or file names
+    return ''.join(p if p.startswith('<') else translit_text(p) for p in re.split(r'(<[^>]+>)', h))

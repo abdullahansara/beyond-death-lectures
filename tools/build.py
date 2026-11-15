@@ -1,6 +1,6 @@
 import os, re, glob, html, shutil, json, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from sanitize import clean
+from sanitize import clean, translit_html, translit_text
 from docx import Document
 from docx.shared import Pt
 
@@ -59,17 +59,18 @@ def md2html(md):
 
 def page(title, body, depth=0):
     p = '../' * depth
-    return f'''<!doctype html>
+    return translit_html(f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)} | Beyond Death (Ān sūy-e marg)</title>
 <link rel="stylesheet" href="{p}assets/style.css"></head>
 <body><header><div class="wrap"><a class="brand" href="{p}index.html">Beyond Death <span>Ān sūy-e marg: the lectures of Hujjat al-Islam Aminikhah, with English summaries</span></a>
 <nav><a href="{p}about.html">The speaker</a><a href="{p}nde-iran.html">NDEs in Iran</a><a href="{p}position.html">His reading of NDEs</a><a href="{p}sessions/index.html">Sessions</a><a href="{p}notes.html">About this site</a></nav></div></header>
 <main class="wrap">{body}</main>
-<footer><div class="wrap">Lectures and Persian transcripts belong to their source (aminikhaah.ir) and are shown here for study, with credit. English summaries were prepared with AI assistance and reviewed against the Persian transcripts. <a href="{p}notes.html">About this site</a></div></footer></body></html>'''
+<footer><div class="wrap">Lectures and Persian transcripts belong to their source (aminikhaah.ir) and are shown here for study, with credit. English summaries were prepared with AI assistance and reviewed against the Persian transcripts. <a href="{p}notes.html">About this site</a></div></footer></body></html>''')
 
 
 def make_docx(md, dst):
+    md = translit_text(md)
     d = Document()
     st = d.styles['Normal']
     st.font.name = 'Times New Roman'

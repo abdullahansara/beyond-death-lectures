@@ -1,7 +1,7 @@
-:root{--ink:#171717;--rule:#E8E8E6;--meta:#707070}
+:root{--ink:#171717;--paper:#F7F6F2;--rule:#E1DFD9;--meta:#6B6B68}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:#fff;color:var(--ink);font:19px/1.6 "EB Garamond",Garamond,"Times New Roman",serif;font-variant-numeric:oldstyle-nums;text-rendering:optimizeLegibility}
+body{margin:0;background:var(--paper);color:var(--ink);font:19px/1.6 "EB Garamond",Garamond,"Times New Roman",serif;font-variant-numeric:oldstyle-nums;text-rendering:optimizeLegibility}
 .wrap{max-width:1280px;margin:0 auto;padding:0 32px}
 a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 a:hover{text-decoration-thickness:2px}
@@ -36,9 +36,9 @@ table{width:100%;border-collapse:collapse;margin:0 0 1rem;font-size:.95rem}
 th{font-size:.72rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--meta);text-align:left;padding:6px 12px 6px 0;border-bottom:1px solid var(--ink)}
 td{padding:5px 12px 5px 0;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.4}
 td:first-child,th:first-child{width:3rem}
-.fa{font-family:"Noto Naskh Arabic","Vazirmatn",Tahoma,serif;font-size:1.05em;line-height:2.1;font-variant-numeric:normal}
-p.fa{font-size:1.3rem;margin:0 0 1.2rem;color:var(--ink)}
-td.fa{text-align:right;font-size:1rem;line-height:1.8}
+.fa{font-family:"Amiri","Noto Naskh Arabic",Tahoma,serif;font-size:1.12em;line-height:2;font-variant-numeric:normal}
+p.fa{font-size:1.45rem;margin:0 0 1.2rem;color:var(--ink)}
+td.fa{text-align:right;font-size:1.1rem;line-height:1.7}
 details>div.fa p{margin:.8em 0}
 summary{cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 summary:hover{text-decoration-thickness:2px}
