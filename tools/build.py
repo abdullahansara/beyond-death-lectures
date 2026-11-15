@@ -66,7 +66,7 @@ def page(title, body, depth=0):
 <body><header><div class="wrap"><a class="brand" href="{p}index.html">Ān sūy-e marg <span>Beyond Death: the lectures of Hujjat al-Islam Aminikhah</span></a>
 <nav><a href="{p}about.html">The speaker</a><a href="{p}nde-iran.html">NDEs in Iran</a><a href="{p}position.html">His reading of NDEs</a><a href="{p}sessions/index.html">Sessions</a><a href="{p}notes.html">About this site</a></nav></div></header>
 <main class="wrap">{body}</main>
-<footer><div class="wrap">Lectures, audio and Persian transcripts belong to their source (aminikhaah.ir) and are shown here for study, with credit. English summaries were prepared with AI assistance and reviewed against the Persian transcripts. <a href="{p}notes.html">About this site</a></div></footer></body></html>'''
+<footer><div class="wrap">Lectures and Persian transcripts belong to their source (aminikhaah.ir) and are shown here for study, with credit. English summaries were prepared with AI assistance and reviewed against the Persian transcripts. <a href="{p}notes.html">About this site</a></div></footer></body></html>'''
 
 
 def make_docx(md, dst):
@@ -157,11 +157,11 @@ for g, a, b in groups:
     rows += f'<h2>{g}</h2><table><tr><th>#</th><th>Session</th><th>Persian title</th><th>Audio</th></tr>'
     for s in ses[a - 1:b]:
         rows += (f'<tr><td>{s["n"]}</td><td><a href="{s["n"]:02d}.html">{E(s["en"])}</a></td>'
-                 f'<td class="fa" dir="rtl" lang="fa">{E(s["pt"])}</td><td>{"yes" if s["audio"] else "source"}</td></tr>')
+                 f'<td class="fa" dir="rtl" lang="fa">{E(s["pt"])}</td><td><a href="https://aminikhaah.ir/song/{s["n"]}">Listen</a></td></tr>')
     rows += '</table>'
 write(os.path.join(ROOT, 'sessions', 'index.html'), page('Sessions',
       '<h1>The sessions</h1><p>Forty-one sessions on the book <em>Ān sūy-e marg</em> ("Beyond Death"), '
-      'given to university students in Iran. Each page has an English summary and the Persian transcript, with the audio.</p>' + rows, 1))
+      'given to university students in Iran. Each page has an English summary and the Persian transcript, with a link to the audio on the speaker\'s site.</p>' + rows, 1))
 
 for name, title in (('index', 'Home'), ('about', 'The speaker'), ('nde-iran', 'Near-death experiences in Iran'), ('position', 'A Sadrian reading of NDEs'), ('notes', 'About this site')):
     body = read(os.path.join(ROOT, 'tools', 'pages', name + '.html'))
