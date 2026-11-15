@@ -1,5 +1,39 @@
-# Beyond Death: lectures of Hujjat al-Islam Aminikhah
+# Beyond Death: the lectures of Ḥujjat al-Islām Muṣṭafā Amīnīkhāh
 
-Site: https://beyond-death.pages.dev/ (Cloudflare Pages, deployed automatically from this repository on every push to `main`)
+**Site: https://beyond-death.pages.dev/**
 
-English summaries and Persian transcripts of the 41 sessions of *Ān sūy-e marg* ("Beyond Death"), a lecture series on three Iranian near-death accounts, with links to the audio on the speaker's own site (aminikhaah.ir). Rebuild with `python tools/build.py`.
+In early 2019 Muṣṭafā Amīnīkhāh began a series of lectures for university students on *Ān sūy-e marg* ("Beyond Death"), a Persian book of three near-death accounts. Over thirty-nine sessions he read the accounts and set them against the Qurʾān, the sayings of the Imams and the philosophy of Mullā Ṣadrā. Two question-and-answer sessions followed in 2020.
+
+This repository is the source of the site that gathers the whole series: 41 sessions, each with an English summary, the Persian transcript and a link to the audio on the speaker's own website, [aminikhaah.ir](https://aminikhaah.ir/). Three short pages give the context: the speaker, a review of the research on near-death experiences in Iran, and a synthesis of his reading of them.
+
+## What is here
+
+| Path | Contents |
+| --- | --- |
+| `index.html`, `about.html`, `nde-iran.html`, `position.html`, `notes.html` | The home page, the speaker, NDEs in Iran, his reading of NDEs, and sources |
+| `sessions/` | One page per session (`01.html` to `41.html`) and the session list |
+| `transcripts/` | The Persian transcript of each session as plain text |
+| `downloads/` | Each English summary as a Word file |
+| `assets/` | Stylesheet, fonts (EB Garamond, Amiri, Noto Naskh Arabic) and the portrait |
+| `tools/` | The build script, page templates and style sources |
+
+The published files at the top level are generated. Edit the templates in `tools/pages/` and `tools/style.css`, not the generated HTML.
+
+## Deployment
+
+Cloudflare Pages serves the repository root and redeploys on every push to `main`. There is no build step on the server.
+
+## Rebuilding the pages
+
+```
+pip install python-docx
+python tools/build.py
+```
+
+The script reads the raw transcripts and the session summaries from a folder named `AminikhahDurus` next to this repository. Set `BEYOND_DEATH_SRC` to use another location. That source folder is not part of this repository, so a full rebuild needs it. Template and style changes can be tested by opening the generated pages in a browser.
+
+## Sources and credit
+
+The lectures and the Persian transcripts belong to [aminikhaah.ir](https://aminikhaah.ir/), the speaker's own site, and are shown here with credit to make the series easier to study. The transcripts are the source site's automatic transcriptions and contain mishearings and gaps. The English summaries are not translations: they follow each lecture, were prepared with AI assistance and were checked against the Persian text. Qurʾān verses are given in the Sahih International translation. Arabic and Persian names and terms are transliterated.
+
+If the speaker or his site would like anything changed or removed, please open an issue on this repository.
