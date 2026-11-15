@@ -4,8 +4,9 @@ from sanitize import clean, translit_html, translit_text
 from docx import Document
 from docx.shared import Pt
 
-SRC = r'C:\Users\ansara\Desktop\Claude Projects\AminikhahDurus'
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# folder holding the raw transcripts and summaries; override with the BEYOND_DEATH_SRC environment variable
+SRC = os.environ.get('BEYOND_DEATH_SRC', os.path.join(os.path.dirname(ROOT), 'AminikhahDurus'))
 E = html.escape
 
 
