@@ -60,7 +60,7 @@ def page(title, body, depth=0):
 <title>{E(title)} | Ān sūy-e marg</title>
 <link rel="stylesheet" href="{p}assets/style.css"></head>
 <body><header><div class="wrap"><a class="brand" href="{p}index.html">Ān sūy-e marg <span>Beyond Death: the lectures of Hujjat al-Islam Aminikhah</span></a>
-<nav><a href="{p}about.html">The speaker</a><a href="{p}nde-iran.html">NDEs in Iran</a><a href="{p}sessions/index.html">Sessions</a><a href="{p}notes.html">Notes and credits</a></nav></div></header>
+<nav><a href="{p}about.html">The speaker</a><a href="{p}nde-iran.html">NDEs in Iran</a><a href="{p}position.html">His reading of NDEs</a><a href="{p}sessions/index.html">Sessions</a><a href="{p}notes.html">Notes and credits</a></nav></div></header>
 <main class="wrap">{body}</main>
 <footer><div class="wrap">Lectures, audio and Persian transcripts belong to their source (aminikhaah.ir) and are shown here for study, with credit. English summaries are AI-assisted and checked against the transcripts. <a href="{p}notes.html">Notes and credits</a></div></footer></body></html>'''
 
@@ -130,7 +130,7 @@ write(os.path.join(ROOT, 'sessions', 'index.html'), page('Sessions',
       '<h1>The sessions</h1><p>Forty-one sessions on the book <em>Ān sūy-e marg</em> ("Beyond Death"), '
       'given to university students in Iran. Each page has the audio, an English summary and the Persian transcript.</p>' + rows, 1))
 
-for name, title in (('index', 'Home'), ('about', 'The speaker'), ('nde-iran', 'Near-death experiences in Iran'), ('notes', 'Notes and credits')):
+for name, title in (('index', 'Home'), ('about', 'The speaker'), ('nde-iran', 'Near-death experiences in Iran'), ('position', 'A Sadrian reading of NDEs'), ('notes', 'Notes and credits')):
     body = read(os.path.join(ROOT, 'tools', 'pages', name + '.html'))
     write(os.path.join(ROOT, name + '.html'), page(title, body))
 write(os.path.join(ROOT, '.nojekyll'), '')
