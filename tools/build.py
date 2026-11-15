@@ -36,7 +36,7 @@ def md2html(md):
             stack -= 1
 
     for line in md.split('\n'):
-        if not line.strip() or line.startswith('# '):
+        if not line.strip() or line.startswith('# ') or line.startswith('Source: '):
             continue
         if line.startswith('## '):
             close()
