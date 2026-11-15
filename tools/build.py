@@ -1,4 +1,8 @@
-import os, re, glob, html, shutil, json
+import os, re, glob, html, shutil, json, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sanitize import clean
+from docx import Document
+from docx.shared import Pt
 
 SRC = r'C:\Users\ansara\Desktop\Claude Projects\AminikhahDurus'
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -60,9 +64,39 @@ def page(title, body, depth=0):
 <title>{E(title)} | Ān sūy-e marg</title>
 <link rel="stylesheet" href="{p}assets/style.css"></head>
 <body><header><div class="wrap"><a class="brand" href="{p}index.html">Ān sūy-e marg <span>Beyond Death: the lectures of Hujjat al-Islam Aminikhah</span></a>
-<nav><a href="{p}about.html">The speaker</a><a href="{p}nde-iran.html">NDEs in Iran</a><a href="{p}position.html">His reading of NDEs</a><a href="{p}sessions/index.html">Sessions</a><a href="{p}notes.html">Notes and credits</a></nav></div></header>
+<nav><a href="{p}about.html">The speaker</a><a href="{p}nde-iran.html">NDEs in Iran</a><a href="{p}position.html">His reading of NDEs</a><a href="{p}sessions/index.html">Sessions</a><a href="{p}notes.html">About this site</a></nav></div></header>
 <main class="wrap">{body}</main>
-<footer><div class="wrap">Lectures, audio and Persian transcripts belong to their source (aminikhaah.ir) and are shown here for study, with credit. English summaries are AI-assisted and checked against the transcripts. <a href="{p}notes.html">Notes and credits</a></div></footer></body></html>'''
+<footer><div class="wrap">Lectures, audio and Persian transcripts belong to their source (aminikhaah.ir) and are shown here for study, with credit. English summaries were prepared with AI assistance and reviewed against the Persian transcripts. <a href="{p}notes.html">About this site</a></div></footer></body></html>'''
+
+
+def make_docx(md, dst):
+    d = Document()
+    st = d.styles['Normal']
+    st.font.name = 'Times New Roman'
+    st.font.size = Pt(11)
+
+    def runs(p, t):
+        for part in re.split(r'(\*\*[^*]+\*\*)', t):
+            if part.startswith('**') and part.endswith('**'):
+                p.add_run(part[2:-2]).bold = True
+            else:
+                p.add_run(part.replace('*', ''))
+
+    for line in md.split(chr(10)):
+        if not line.strip():
+            continue
+        if line.startswith('# '):
+            d.add_heading(line[2:], 0)
+        elif line.startswith('## '):
+            d.add_heading(line[3:], 1)
+        else:
+            m = re.match(r'^(\s*)- (.*)', line)
+            if m:
+                p = d.add_paragraph(style='List Bullet' if len(m.group(1)) < 2 else 'List Bullet 2')
+                runs(p, m.group(2))
+            else:
+                runs(d.add_paragraph(), line)
+    d.save(dst)
 
 
 ses = []
@@ -71,7 +105,7 @@ for n in range(1, 42):
     pt = raw[0].replace('TITLE:', '').strip()
     pt = re.sub(r'\s*-\s*شرح و بررسی کتاب آن سوی مرگ\s*$', '', pt)
     body = [l for l in raw[5:] if l.strip()]
-    md = read(os.path.join(SRC, 'summaries', f'1_BeyondDeath_s{n:02d}_song{n}.md'))
+    md = clean(read(os.path.join(SRC, 'summaries', f'1_BeyondDeath_s{n:02d}_song{n}.md')))
     h1 = md.split('\n')[0]
     m = re.search(r'session \d+: (.*)$', h1)
     en = (m.group(1) if m else re.sub(r'^# ', '', h1)).strip().strip('"')
@@ -91,7 +125,7 @@ for s in ses:
     af = [f for f in ('opus', 'm4a', 'mp3', 'ogg') if os.path.exists(os.path.join(adir, f'{n:02d}.{f}'))]
     s['audio'] = f'{n:02d}.{af[0]}' if af else None
     os.makedirs(os.path.join(ROOT, 'downloads'), exist_ok=True)
-    shutil.copy(s['docx'], os.path.join(ROOT, 'downloads', f'session-{n:02d}-summary.docx'))
+    make_docx(s['md'], os.path.join(ROOT, 'downloads', f'session-{n:02d}-summary.docx'))
     write(os.path.join(ROOT, 'transcripts', f'{n:02d}.txt'),
           f"{s['pt']}\nhttps://aminikhaah.ir/song/{n}\n\n" + '\n\n'.join(s['body']))
     paras = ''.join('<p>%s</p>' % E(l) for l in s['body'])
@@ -102,8 +136,7 @@ for s in ses:
               f'<p class="small">Original audio, re-encoded to a small file for the web. '
               f'<a href="https://aminikhaah.ir/song/{n}">Original page</a>.</p>')
     else:
-        au = (f'<p class="small">Audio for this session is not yet on this site. '
-              f'<a href="https://aminikhaah.ir/song/{n}">Listen at the source page</a>.</p>')
+        au = (f'<p class="small">Listen to this session at its <a href="https://aminikhaah.ir/song/{n}">source page</a>.</p>')
     body = f'''<div class="pn">{prev}{nxt}</div>
 <h1>Session {n}: {E(s['en'])}</h1>
 <p class="fa" dir="rtl" lang="fa">{E(s['pt'])}</p>
@@ -112,7 +145,7 @@ for s in ses:
 <div class="summary">{md2html(s['md'])}</div>
 <p class="small"><a href="../downloads/session-{n:02d}-summary.docx">Download summary (.docx)</a></p>
 <h2>Persian transcript</h2>
-<p class="small">The transcript below is the source site's automatic Persian transcription and contains errors. <a href="../transcripts/{n:02d}.txt">Plain text</a>.</p>
+<p class="small">Automatic transcription from the source site; it may contain errors. <a href="../transcripts/{n:02d}.txt">Plain text</a>.</p>
 <details><summary>Show the transcript ({s['words']:,} words)</summary><div class="fa" dir="rtl" lang="fa">{paras}</div></details>
 <div class="pn">{prev}{nxt}</div>'''
     write(os.path.join(ROOT, 'sessions', f'{n:02d}.html'), page(f'Session {n}: {s["en"]}', body, 1))
@@ -128,9 +161,9 @@ for g, a, b in groups:
     rows += '</table>'
 write(os.path.join(ROOT, 'sessions', 'index.html'), page('Sessions',
       '<h1>The sessions</h1><p>Forty-one sessions on the book <em>Ān sūy-e marg</em> ("Beyond Death"), '
-      'given to university students in Iran. Each page has the audio, an English summary and the Persian transcript.</p>' + rows, 1))
+      'given to university students in Iran. Each page has an English summary and the Persian transcript, with the audio.</p>' + rows, 1))
 
-for name, title in (('index', 'Home'), ('about', 'The speaker'), ('nde-iran', 'Near-death experiences in Iran'), ('position', 'A Sadrian reading of NDEs'), ('notes', 'Notes and credits')):
+for name, title in (('index', 'Home'), ('about', 'The speaker'), ('nde-iran', 'Near-death experiences in Iran'), ('position', 'A Sadrian reading of NDEs'), ('notes', 'About this site')):
     body = read(os.path.join(ROOT, 'tools', 'pages', name + '.html'))
     write(os.path.join(ROOT, name + '.html'), page(title, body))
 write(os.path.join(ROOT, '.nojekyll'), '')
