@@ -118,7 +118,7 @@ for n in range(1, 42):
     ses.append(dict(n=n, pt=pt, en=en, body=body, md=md, docx=docx,
                     words=sum(len(l.split()) for l in body)))
 
-write(os.path.join(ROOT, 'assets', 'style.css'), read(os.path.join(ROOT, 'tools', 'style.css')))
+write(os.path.join(ROOT, 'assets', 'style.css'), read(os.path.join(ROOT, 'tools', 'fonts.css')) + read(os.path.join(ROOT, 'tools', 'style.css')))
 adir = os.path.join(ROOT, 'audio')
 for s in ses:
     n = s['n']
